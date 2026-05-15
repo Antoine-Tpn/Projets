@@ -1,0 +1,12 @@
+*Description d'un multiplieur analogique AD633.
+*Macro modèle modélisant :
+*Les tensions de saturations
+*La bande passante de 1MHz.
+*                         VNEG
+*             X1 X2 Y1 Y2  |  Z  W  VPOS
+.SUBCKT AD633  1  2  3  4  5  6  7  8
+B1 9 0 V=(0.1*(V(1)-V(2))*(V(3)-V(4)))+V(6)
+R3 9 10 100
+C1 10 0 1.5915n
+B2 7 0 V=table(V(10),V(5),V(5),V(8),V(8))
+.ENDS AD633
