@@ -1,0 +1,28 @@
+Circuit: * D:\Users\Utilisateur\Documents\Antoine\Cours\ENIB\S4\CEL\projet 1\Draft1.asc
+
+WARNING: Node NC_02 is floating.
+
+WARNING: Less than two connections to node VI1_2.  This node is used by VI1_2.
+WARNING: Less than two connections to node VI1_1.  This node is used by VI1_1.
+WARNING: Less than two connections to node NC_01.  This node is used by D2.
+WARNING: Less than two connections to node NC_02.  This node is used by D2.
+WARNING: Less than two connections to node VS1.  This node is used by R2.
+Direct Newton iteration for .op point succeeded.
+
+Date: Fri Feb 16 15:15:17 2024
+Total elapsed time: 0.094 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 6167
+traniter = 6137
+tranpoints = 2892
+accept = 2509
+rejected = 383
+matrix size = 12
+fillins = 0
+solver = Normal
+Matrix Compiler1: 284 bytes object code size  0.2/0.1/[0.1]
+Matrix Compiler2: 628 bytes object code size  0.2/0.2/[0.1]
+
