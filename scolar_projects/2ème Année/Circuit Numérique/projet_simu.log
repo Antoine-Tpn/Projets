@@ -1,0 +1,66 @@
+Circuit: * D:\Users\Utilisateur\Documents\Antoine\Cours\ENIB\S3\CIN\Labo\Mini-projet\projet_simu.asc
+
+WARNING: Less than two connections to node U13:DP.  This node is used by A:U13:DDEL.
+WARNING: Less than two connections to node U14:DP.  This node is used by A:U14:DDEL.
+WARNING: Less than two connections to node FEUX_AVANT.  This node is used by R:U15:OUT:OUT.
+WARNING: Less than two connections to node AVANCER.  This node is used by R:U16:OUT:OUT.
+WARNING: Less than two connections to node RECULER.  This node is used by R:U17:OUT:OUT.
+WARNING: Less than two connections to node FEUX_ARRIÈRE.  This node is used by R:U19:OUT:OUT.
+Direct Newton iteration for .op point succeeded.
+Ignoring empty pin current: Ix(u1:vcc)
+Ignoring empty pin current: Ix(u2:vcc)
+Ignoring empty pin current: Ix(u3:vcc)
+Ignoring empty pin current: Ix(u4:vcc)
+Ignoring empty pin current: Ix(u5:vcc)
+Ignoring empty pin current: Ix(u6:vcc)
+Ignoring empty pin current: Ix(u7:vcc)
+Ignoring empty pin current: Ix(u8:vcc)
+Ignoring empty pin current: Ix(u9:vcc)
+Ignoring empty pin current: Ix(u10:vcc)
+Ignoring empty pin current: Ix(u11:vcc)
+Ignoring empty pin current: Ix(u12:vcc)
+Ignoring empty pin current: Ix(u13:vcc)
+Ignoring empty pin current: Ix(u14:vcc)
+Ignoring empty pin current: Ix(u15:vcc)
+Ignoring empty pin current: Ix(u16:vcc)
+Ignoring empty pin current: Ix(u17:vcc)
+Ignoring empty pin current: Ix(u18:vcc)
+Ignoring empty pin current: Ix(u19:vcc)
+Ignoring empty pin current: Ix(u1:vcc)
+Ignoring empty pin current: Ix(u2:vcc)
+Ignoring empty pin current: Ix(u3:vcc)
+Ignoring empty pin current: Ix(u4:vcc)
+Ignoring empty pin current: Ix(u5:vcc)
+Ignoring empty pin current: Ix(u6:vcc)
+Ignoring empty pin current: Ix(u7:vcc)
+Ignoring empty pin current: Ix(u8:vcc)
+Ignoring empty pin current: Ix(u9:vcc)
+Ignoring empty pin current: Ix(u10:vcc)
+Ignoring empty pin current: Ix(u11:vcc)
+Ignoring empty pin current: Ix(u12:vcc)
+Ignoring empty pin current: Ix(u13:vcc)
+Ignoring empty pin current: Ix(u14:vcc)
+Ignoring empty pin current: Ix(u15:vcc)
+Ignoring empty pin current: Ix(u16:vcc)
+Ignoring empty pin current: Ix(u17:vcc)
+Ignoring empty pin current: Ix(u18:vcc)
+Ignoring empty pin current: Ix(u19:vcc)
+
+Date: Wed Dec 20 18:57:02 2023
+Total elapsed time: 0.314 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 12670
+traniter = 12648
+tranpoints = 5750
+accept = 5036
+rejected = 714
+matrix size = 277
+fillins = 7
+solver = Normal
+Thread vector: 10.7/6.0[7] 4.2/2.8[7] 3.0/1.4[6] 0.4/1.8[1]  2592/500
+Matrix Compiler1:     484 opcodes  2.4/[2.1]/4.0
+Matrix Compiler2: 14.35 KB object code size  1.4/2.3/[0.6]
+
