@@ -1,0 +1,3 @@
+-classpath "D:\Vijeo\Vijeo-Manager\IHM_TC\Build";"C:\Program Files (x86)\Schneider Electric\Vijeo-Designer 6.2\Vijeo-Runtime\Public";"C:\Program Files (x86)\Schneider Electric\Vijeo-Designer 6.2\Vijeo-Runtime\Public\PERC\lib\PERClib.zip"
+-compiler "C:\Program Files (x86)\Schneider Electric\Vijeo-Designer 6.2\Vijeo-Runtime\Public\Bin\jikes.exe"
+-options -encoding UTF16_LittleEndian
