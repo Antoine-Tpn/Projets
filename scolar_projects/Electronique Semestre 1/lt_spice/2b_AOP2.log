@@ -1,0 +1,20 @@
+Circuit: * D:\Users\Utilisateur\Documents\Antoine\Cours\S1\électronique\projet_elec_s1\lt_spice\2b_AOP2.asc
+
+
+Date: Mon Nov 21 15:55:38 2022
+Total elapsed time: 0.047 seconds.
+
+tnom = 27
+temp = 27
+method = trap
+totiter = 403
+traniter = 0
+tranpoints = 0
+accept = 0
+rejected = 0
+matrix size = 8
+fillins = 0
+solver = Normal
+Matrix Compiler1: 210 bytes object code size  0.1/0.1/[0.0]
+Matrix Compiler2: 506 bytes object code size  0.1/0.1/[0.0]
+
