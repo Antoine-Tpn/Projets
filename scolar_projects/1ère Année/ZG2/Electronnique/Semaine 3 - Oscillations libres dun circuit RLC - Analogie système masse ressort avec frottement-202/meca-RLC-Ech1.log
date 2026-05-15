@@ -1,0 +1,21 @@
+Circuit: * D:\Users\Utilisateur\Documents\Antoine\Cours\ENIB\S2\ZG2\Elec\Semaine 3 - Oscillations libres dun circuit RLC - Analogie système masse ressort avec frottement-202\meca-RLC-Ech1.asc
+
+Direct Newton iteration for .op point succeeded.
+
+Date: Wed Jun 07 10:22:23 2023
+Total elapsed time: 0.015 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 3303
+traniter = 3300
+tranpoints = 1651
+accept = 1361
+rejected = 290
+matrix size = 2
+fillins = 0
+solver = Normal
+Matrix Compiler1: 54 bytes object code size  0.0/0.0/[0.0]
+Matrix Compiler2: 116 bytes object code size  0.0/0.0/[0.0]
+
