@@ -19,7 +19,7 @@ L'objectif de ce dépôt est de :
 - Documenter mes projets et leur évolution.
 - Présenter mes compétences techniques.
 - Conserver une trace de mes travaux académiques et personnels.
-- Partager des ressources et réalisations avec d'autres passionnés.
+- Partager des ressources et réalisations.
 
 ---
 
