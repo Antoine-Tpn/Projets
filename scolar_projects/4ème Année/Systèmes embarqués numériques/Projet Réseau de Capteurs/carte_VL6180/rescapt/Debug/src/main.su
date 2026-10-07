@@ -1,0 +1,8 @@
+/home/e2022/a2turpin/Documents/S7/sen_can/carte_VL6180/rescapt/CMSIS/core/core_cm3.h:1524:22:NVIC_SetPriority	16	static
+/home/e2022/a2turpin/Documents/S7/sen_can/carte_VL6180/rescapt/CMSIS/core/core_cm3.h:1616:22:NVIC_SystemReset	4	static,ignoring_inline_asm
+/home/e2022/a2turpin/Documents/S7/sen_can/carte_VL6180/rescapt/CMSIS/core/core_cm3.h:1656:26:SysTick_Config	16	static
+../src/main.c:69:5:main	32	static
+../src/main.c:196:6:can_callback	24	static
+../src/main.c:219:6:HAL_TIM_PeriodElapsedCallback	32	static
+../src/main.c:233:6:VL6180x_Init	16	static
+../src/main.c:262:6:VL6180x_Step	8	static
