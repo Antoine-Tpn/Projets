@@ -1,0 +1,18 @@
+!SESSION 2026-10-05 14:18:47.181 -----------------------------------------------
+eclipse.buildId=Version 1.9.0
+java.version=11.0.11
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Command-line arguments:  -os linux -ws gtk -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-10-05 14:19:04.060
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-10-05 14:19:04.102
+!MESSAGE Log4j initialized with config file /home/e2022/a2turpin/Documents/S7/sen_robot/WORKSPACE_F411_uROS/base_robot/.metadata/.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-10-05 14:19:06.723
+!MESSAGE Started RMI Server, listening on port 41338
+
+!ENTRY org.eclipse.core.resources 4 566 2026-10-05 14:19:23.660
+!MESSAGE Workspace was not properly initialized or has already shutdown.

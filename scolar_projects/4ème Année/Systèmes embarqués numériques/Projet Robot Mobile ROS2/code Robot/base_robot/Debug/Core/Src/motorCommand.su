@@ -1,0 +1,10 @@
+../Core/Src/motorCommand.c:25:6:motorCommand_Init	16	static
+../Core/Src/motorCommand.c:64:6:motorLeft_SetDuty	16	static
+../Core/Src/motorCommand.c:71:6:motorRight_SetDuty	16	static
+../Core/Src/motorCommand.c:78:6:motorRightCorrec	40	static
+../Core/Src/motorCommand.c:105:6:motorLeftCorrec	40	static
+../Core/Src/motorCommand.c:129:6:moveForward	16	static
+../Core/Src/motorCommand.c:136:6:moveBackward	16	static
+../Core/Src/motorCommand.c:144:6:turnLeft	16	static
+../Core/Src/motorCommand.c:151:6:turnRight	16	static
+../Core/Src/motorCommand.c:159:6:stop	8	static

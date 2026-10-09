@@ -1,0 +1,91 @@
+19:05:46 **** Incremental Build of configuration Debug for project base_robot ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F411xE -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I"/home/e2023/e3pennan/Documents/sen robot/robot_task/base_robot/micro_ros_stm32cubemx_utils/microros_static_library/libmicroros/microros_include" -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c: In function 'task_Sensor':
+../Core/Src/main.c:86:11: warning: implicit declaration of function 'captDistIR_ToCm'; did you mean 'captDistIR_Get'? [-Wimplicit-function-declaration]
+   86 |   distL = captDistIR_ToCm(tab_distIR[0]);
+      |           ^~~~~~~~~~~~~~~
+      |           captDistIR_Get
+../Core/Src/main.c:123:10: warning: unused variable 'cmd' [-Wunused-variable]
+  123 |     char cmd;
+      |          ^~~
+../Core/Src/main.c: In function 'task_Manual':
+../Core/Src/main.c:166:5: warning: implicit declaration of function 'moveForward' [-Wimplicit-function-declaration]
+  166 |     moveForward(motorSpeed);
+      |     ^~~~~~~~~~~
+../Core/Src/main.c:170:5: warning: implicit declaration of function 'moveBackward' [-Wimplicit-function-declaration]
+  170 |     moveBackward(motorSpeed);
+      |     ^~~~~~~~~~~~
+../Core/Src/main.c:174:5: warning: implicit declaration of function 'turnLeft' [-Wimplicit-function-declaration]
+  174 |     turnLeft(motorSpeed);
+      |     ^~~~~~~~
+../Core/Src/main.c:178:5: warning: implicit declaration of function 'turnRight' [-Wimplicit-function-declaration]
+  178 |     turnRight(motorSpeed);
+      |     ^~~~~~~~~
+../Core/Src/main.c:182:5: warning: implicit declaration of function 'stop' [-Wimplicit-function-declaration]
+  182 |     stop();
+      |     ^~~~
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:281:6: warning: unused variable 'tab_dist' [-Wunused-variable]
+  281 |  int tab_dist[2];
+      |      ^~~~~~~~
+../Core/Src/main.c:280:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+  280 |  int ret = 0;
+      |      ^~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:45:13: warning: 'randomTimerCallback' declared 'static' but never defined [-Wunused-function]
+   45 | static void randomTimerCallback(TimerHandle_t xTimer);
+      |             ^~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c: In function 'microros_task':
+../Core/Src/main.c:466:2: warning: ignoring return value of 'rcutils_set_default_allocator' declared with attribute 'warn_unused_result' [-Wunused-result]
+  466 |  rcutils_set_default_allocator(&freeRTOS_allocator);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:478:2: warning: ignoring return value of 'rcl_init_options_init' declared with attribute 'warn_unused_result' [-Wunused-result]
+  478 |  rcl_init_options_init(&init_options, allocator);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Core/Src/main.c:480:2: warning: ignoring return value of 'rcl_init_options_set_domain_id' declared with attribute 'warn_unused_result' [-Wunused-result]
+  480 |  rcl_init_options_set_domain_id(&init_options,
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  481 |  ROS_DOMAIN_ID);
+      |  ~~~~~~~~~~~~~~
+../Core/Src/main.c:616:3: warning: ignoring return value of 'rcl_publish' declared with attribute 'warn_unused_result' [-Wunused-result]
+  616 |   rcl_publish(&sensor_vl53_publisher, &sensor_vl53_msg,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  617 |   NULL);
+      |   ~~~~~
+../Core/Src/main.c:620:3: warning: ignoring return value of 'rcl_publish' declared with attribute 'warn_unused_result' [-Wunused-result]
+  620 |   rcl_publish(&sensor_ir_left_publisher, &sensor_ir_left_msg,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  621 |   NULL);
+      |   ~~~~~
+../Core/Src/main.c:624:3: warning: ignoring return value of 'rcl_publish' declared with attribute 'warn_unused_result' [-Wunused-result]
+  624 |   rcl_publish(&sensor_ir_right_publisher, &sensor_ir_right_msg,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  625 |   NULL);
+      |   ~~~~~
+../Core/Src/main.c:637:3: warning: ignoring return value of 'rcl_publish' declared with attribute 'warn_unused_result' [-Wunused-result]
+  637 |   rcl_publish(&speed_publisher, &robot_speed_msg,
+      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  638 |   NULL);
+      |   ~~~~~
+At top level:
+../Core/Src/main.c:73:13: warning: 'lastObstacleCmd' defined but not used [-Wunused-variable]
+   73 | static char lastObstacleCmd = 0;
+      |             ^~~~~~~~~~~~~~~
+../Core/Src/main.c:44:22: warning: 'xRandomTimer' defined but not used [-Wunused-variable]
+   44 | static TimerHandle_t xRandomTimer;
+      |                      ^~~~~~~~~~~~
+arm-none-eabi-gcc -o "base_robot.elf" @"objects.list"  -lmicroros -mcpu=cortex-m4 -T"/home/e2023/e3pennan/Documents/sen robot/robot_task/base_robot/STM32F411RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="base_robot.map" -Wl,--gc-sections -static -L"/home/e2023/e3pennan/Documents/sen robot/robot_task/base_robot/micro_ros_stm32cubemx_utils/microros_static_library/libmicroros" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: base_robot.elf
+ 
+arm-none-eabi-size   base_robot.elf 
+arm-none-eabi-objdump -h -S  base_robot.elf  > "base_robot.list"
+   text	   data	    bss	    dec	    hex	filename
+ 129088	    652	  60552	 190292	  2e754	base_robot.elf
+Finished building: default.size.stdout
+ 
+Finished building: base_robot.list
+ 
+
+19:05:51 Build Finished. 0 errors, 19 warnings. (took 4s.661ms)
+
