@@ -1,0 +1,8 @@
+filter.lfs.clean=git-lfs clean -- %f
+filter.lfs.smudge=git-lfs smudge -- %f
+filter.lfs.process=git-lfs filter-process
+filter.lfs.required=true
+user.name=Antoine_Tpn
+user.email=antoineturpin22@gmail.com
+credential.https://git.enib.fr.provider=generic
+core.longpaths=true
