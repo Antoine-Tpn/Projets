@@ -12,6 +12,7 @@ public final class Lwjgl3Launcher {
         configuration.setTitle("Les Catacombes");
         configuration.setWindowedMode(1100, 640);
         configuration.setForegroundFPS(60);
+        configuration.useVsync(true);
         new Lwjgl3Application(new Main(), configuration);
     }
 }

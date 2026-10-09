@@ -18,8 +18,11 @@ import java.util.List;
 
 public final class GameScreen extends ScreenAdapter {
     private static final int TILE = 48;
-    private static final int MAP_WIDTH = 15;
-    private static final int MAP_HEIGHT = 11;
+    private static final int MAP_WIDTH = 31;
+    private static final int MAP_HEIGHT = 23;
+    private static final int PLAYER_VISION_RADIUS = 6;
+    private static final float CAMERA_ZOOM = 0.46f;
+    private static final float PLAYER_MOVE_ANIMATION = 0.18f;
     private static final int[][] DIRECTIONS = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
     private static final float PLAYER_STEP_TIME = 0.20f;
 
@@ -28,7 +31,9 @@ public final class GameScreen extends ScreenAdapter {
     private final SpriteBatch batch = new SpriteBatch();
     private final ShapeRenderer shapes = new ShapeRenderer();
     private final OrthographicCamera camera = new OrthographicCamera();
+    private final OrthographicCamera uiCamera = new OrthographicCamera();
     private final char[][] map = new char[MAP_HEIGHT][MAP_WIDTH];
+    private final boolean[][] visibleTiles = new boolean[MAP_HEIGHT][MAP_WIDTH];
     private final List<Enemy> enemies = new ArrayList<>();
     private final boolean[] unlockedWeapons = {true, false, false};
     private final boolean[] heldDirections = new boolean[4];
@@ -42,11 +47,14 @@ public final class GameScreen extends ScreenAdapter {
     private int weaponIndex;
     private float elapsed;
     private float moveTimer;
+    private float playerMoveProgress = 1f;
+    private int previousPlayerX;
+    private int previousPlayerY;
     private float enemyTimer;
     private float attackTimer;
     private float attackCooldown;
     private float messageTimer;
-    private String message = "Trouve la sortie. Les chevaliers te traquent.";
+    private String message = "Trouve la sortie sans te faire reperer.";
     private boolean moving;
     private boolean gameOver;
     private boolean victory;
@@ -54,6 +62,9 @@ public final class GameScreen extends ScreenAdapter {
     GameScreen(Main main, GameAssets assets) {
         this.main = main;
         this.assets = assets;
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = CAMERA_ZOOM;
+        uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         loadLevel(0);
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -112,6 +123,12 @@ public final class GameScreen extends ScreenAdapter {
         if (attackTimer > 0) attackTimer = Math.max(0, attackTimer - delta);
         if (attackCooldown > 0) attackCooldown -= delta;
         if (messageTimer > 0) messageTimer -= delta;
+        playerMoveProgress = Math.min(1f, playerMoveProgress + delta / PLAYER_MOVE_ANIMATION);
+        for (Enemy enemy : enemies) {
+            enemy.moveProgress = Math.min(1f, enemy.moveProgress + delta / PLAYER_MOVE_ANIMATION);
+            enemy.attackCooldown = Math.max(0, enemy.attackCooldown - delta);
+            enemy.attackFlash = Math.max(0, enemy.attackFlash - delta);
+        }
         moveTimer += delta;
 
         int direction = heldDirection();
@@ -125,8 +142,12 @@ public final class GameScreen extends ScreenAdapter {
             int nextX = playerX + dx;
             int nextY = playerY + dy;
             if (walkable(nextX, nextY) && enemyAt(nextX, nextY) == null) {
+                previousPlayerX = playerX;
+                previousPlayerY = playerY;
                 playerX = nextX;
                 playerY = nextY;
+                playerMoveProgress = 0;
+                refreshVisibility();
                 collectTile();
             }
         }
@@ -136,11 +157,6 @@ public final class GameScreen extends ScreenAdapter {
         if (enemyTimer >= enemyStepTime) {
             enemyTimer = 0;
             moveEnemies(delta);
-        } else {
-            for (Enemy enemy : enemies) {
-                enemy.attackCooldown = Math.max(0, enemy.attackCooldown - delta);
-                enemy.attackFlash = Math.max(0, enemy.attackFlash - delta);
-            }
         }
     }
 
@@ -172,8 +188,7 @@ public final class GameScreen extends ScreenAdapter {
 
     private void moveEnemies(float delta) {
         for (Enemy enemy : new ArrayList<>(enemies)) {
-            enemy.attackCooldown = Math.max(0, enemy.attackCooldown - delta);
-            enemy.attackFlash = Math.max(0, enemy.attackFlash - delta);
+            if (!canSeePlayer(enemy)) continue;
             if (canAttackPlayer(enemy)) {
                 if (enemy.attackCooldown <= 0) {
                     health -= enemy.type.damage;
@@ -200,9 +215,21 @@ public final class GameScreen extends ScreenAdapter {
                     bestY = y;
                 }
             }
-            enemy.x = bestX;
-            enemy.y = bestY;
+            if (bestX != enemy.x || bestY != enemy.y) {
+                enemy.previousX = enemy.x;
+                enemy.previousY = enemy.y;
+                enemy.x = bestX;
+                enemy.y = bestY;
+                enemy.moveProgress = 0;
+            }
         }
+    }
+
+    private boolean canSeePlayer(Enemy enemy) {
+        int dx = enemy.x - playerX;
+        int dy = enemy.y - playerY;
+        return dx * dx + dy * dy <= enemy.type.visionRange * enemy.type.visionRange
+                && hasLineOfSight(enemy.x, enemy.y, playerX, playerY);
     }
 
     private boolean canAttackPlayer(Enemy enemy) {
@@ -317,28 +344,99 @@ public final class GameScreen extends ScreenAdapter {
                 map[y][x] = tile;
             }
         }
+        previousPlayerX = playerX;
+        previousPlayerY = playerY;
+        playerMoveProgress = 1;
         enemyTimer = 0;
         moveTimer = 0;
+        refreshVisibility();
     }
 
     private void renderScene() {
         ScreenUtils.clear(0.035f, 0.04f, 0.05f, 1f);
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        float progress = smooth(playerMoveProgress);
+        float playerTileX = previousPlayerX + (playerX - previousPlayerX) * progress;
+        float playerTileY = previousPlayerY + (playerY - previousPlayerY) * progress;
+        float playerWorldX = playerTileX * TILE + TILE / 2f;
+        float playerWorldY = (MAP_HEIGHT - 1 - playerTileY) * TILE + TILE / 2f;
+        camera.position.set(playerWorldX, playerWorldY, 0);
+        camera.update();
         batch.setProjectionMatrix(camera.combined);
         shapes.setProjectionMatrix(camera.combined);
 
-        float mapX = 22;
-        float mapY = (Gdx.graphics.getHeight() - MAP_HEIGHT * TILE) / 2f;
-        drawMap(mapX, mapY);
-        drawCharacters(mapX, mapY);
-        drawHud(mapX + MAP_WIDTH * TILE + 24, Gdx.graphics.getHeight() - 36);
+        drawMap(0, 0);
+        drawCharacters(0, 0);
+        drawFog();
+
+        batch.setProjectionMatrix(uiCamera.combined);
+        shapes.setProjectionMatrix(uiCamera.combined);
+        drawHud(Gdx.graphics.getWidth() - 244, Gdx.graphics.getHeight() - 36);
         if (gameOver || victory) drawEndMessage();
     }
 
-    private void drawMap(float mapX, float mapY) {
-        batch.begin();
+    private void drawFog() {
+        int left = visibleLeft();
+        int right = visibleRight();
+        int bottom = visibleBottomRow();
+        int top = visibleTopRow();
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
+        for (int row = top; row <= bottom; row++) {
+            for (int x = left; x <= right; x++) {
+                if (visibleTiles[row][x]) continue;
+                shapes.setColor(0.015f, 0.018f, 0.022f, 1f);
+                float worldY = (MAP_HEIGHT - 1 - row) * TILE;
+                shapes.rect(x * TILE, worldY, TILE, TILE);
+            }
+        }
+        shapes.end();
+    }
+
+    private void refreshVisibility() {
         for (int row = 0; row < MAP_HEIGHT; row++) {
-            for (int column = 0; column < MAP_WIDTH; column++) {
+            for (int x = 0; x < MAP_WIDTH; x++) {
+                int dx = x - playerX;
+                int dy = row - playerY;
+                visibleTiles[row][x] = dx * dx + dy * dy <= PLAYER_VISION_RADIUS * PLAYER_VISION_RADIUS
+                        && hasLineOfSight(playerX, playerY, x, row);
+            }
+        }
+    }
+
+    private float smooth(float progress) {
+        float clamped = Math.max(0, Math.min(1, progress));
+        return clamped * clamped * (3 - 2 * clamped);
+    }
+
+    private int visibleLeft() {
+        return Math.max(0, (int) Math.floor((camera.position.x
+                - camera.viewportWidth * camera.zoom / 2f) / TILE) - 1);
+    }
+
+    private int visibleRight() {
+        return Math.min(MAP_WIDTH - 1, (int) Math.floor((camera.position.x
+                + camera.viewportWidth * camera.zoom / 2f) / TILE) + 1);
+    }
+
+    private int visibleBottomRow() {
+        int bottomWorldTile = (int) Math.floor((camera.position.y
+                - camera.viewportHeight * camera.zoom / 2f) / TILE) - 1;
+        return Math.min(MAP_HEIGHT - 1, MAP_HEIGHT - 1 - bottomWorldTile);
+    }
+
+    private int visibleTopRow() {
+        int topWorldTile = (int) Math.floor((camera.position.y
+                + camera.viewportHeight * camera.zoom / 2f) / TILE) + 1;
+        return Math.max(0, MAP_HEIGHT - 1 - topWorldTile);
+    }
+
+    private void drawMap(float mapX, float mapY) {
+        int left = visibleLeft();
+        int right = visibleRight();
+        int top = visibleTopRow();
+        int bottom = visibleBottomRow();
+        batch.begin();
+        for (int row = top; row <= bottom; row++) {
+            for (int column = left; column <= right; column++) {
                 float x = mapX + column * TILE;
                 float y = mapY + (MAP_HEIGHT - 1 - row) * TILE;
                 char tile = map[row][column];
@@ -365,13 +463,17 @@ public final class GameScreen extends ScreenAdapter {
     private void drawCharacters(float mapX, float mapY) {
         batch.begin();
         for (Enemy enemy : enemies) {
-            float x = mapX + enemy.x * TILE;
-            float y = mapY + (MAP_HEIGHT - 1 - enemy.y) * TILE;
+            if (!visibleTiles[enemy.y][enemy.x]) continue;
+            float x = mapX + enemy.renderX() * TILE;
+            float y = mapY + (MAP_HEIGHT - 1 - enemy.renderY()) * TILE;
             batch.draw(assets.enemyFrame(enemy.type), x, y, TILE, TILE);
         }
 
-        float playerWorldX = mapX + playerX * TILE;
-        float playerWorldY = mapY + (MAP_HEIGHT - 1 - playerY) * TILE;
+        float playerProgress = smooth(playerMoveProgress);
+        float renderedPlayerX = previousPlayerX + (playerX - previousPlayerX) * playerProgress;
+        float renderedPlayerY = previousPlayerY + (playerY - previousPlayerY) * playerProgress;
+        float playerWorldX = mapX + renderedPlayerX * TILE;
+        float playerWorldY = mapY + (MAP_HEIGHT - 1 - renderedPlayerY) * TILE;
         TextureRegion frame;
         if (attackTimer > 0) {
             frame = assets.orcAttack.getKeyFrame(Math.max(0, 0.24f - attackTimer), false);
@@ -385,40 +487,38 @@ public final class GameScreen extends ScreenAdapter {
                 TILE, TILE, 1, 1, rotation);
         batch.end();
 
+        shapes.begin(ShapeRenderer.ShapeType.Filled);
         for (Enemy enemy : enemies) {
-            if (enemy.health < enemy.maxHealth) {
-                float x = mapX + enemy.x * TILE;
-                float y = mapY + (MAP_HEIGHT - 1 - enemy.y) * TILE + TILE - 4;
-                shapes.begin(ShapeRenderer.ShapeType.Filled);
+            if (visibleTiles[enemy.y][enemy.x] && enemy.health < enemy.maxHealth) {
+                float x = mapX + enemy.renderX() * TILE;
+                float y = mapY + (MAP_HEIGHT - 1 - enemy.renderY()) * TILE + TILE - 4;
                 shapes.setColor(0.08f, 0.06f, 0.06f, 1f);
                 shapes.rect(x + 5, y, TILE - 10, 3);
                 shapes.setColor(enemy.type == Enemy.Type.BOSS ? 0.90f : 0.80f, 0.16f, 0.12f, 1f);
                 shapes.rect(x + 5, y, (TILE - 10) * enemy.health / enemy.maxHealth, 3);
-                shapes.end();
             }
         }
+        shapes.end();
 
+        shapes.begin(ShapeRenderer.ShapeType.Line);
         for (Enemy enemy : enemies) {
-            if (enemy.attackFlash > 0) {
-                float enemyX = mapX + enemy.x * TILE + TILE / 2f;
-                float enemyY = mapY + (MAP_HEIGHT - 1 - enemy.y) * TILE + TILE / 2f;
-                shapes.begin(ShapeRenderer.ShapeType.Line);
+            if (visibleTiles[enemy.y][enemy.x] && enemy.attackFlash > 0) {
+                float enemyX = mapX + enemy.renderX() * TILE + TILE / 2f;
+                float enemyY = mapY + (MAP_HEIGHT - 1 - enemy.renderY()) * TILE + TILE / 2f;
                 if (enemy.type == Enemy.Type.MAGE) shapes.setColor(0.72f, 0.42f, 1f, 1f);
                 else if (enemy.type == Enemy.Type.ARCHER) shapes.setColor(0.96f, 0.75f, 0.34f, 1f);
                 else shapes.setColor(0.95f, 0.28f, 0.20f, 1f);
                 shapes.line(enemyX, enemyY, playerWorldX + TILE / 2f, playerWorldY + TILE / 2f);
-                shapes.end();
             }
         }
 
         if (attackTimer > 0) {
             float centerX = playerWorldX + TILE / 2f + facingX * TILE * 0.72f;
             float centerY = playerWorldY + TILE / 2f + facingY * TILE * 0.72f;
-            shapes.begin(ShapeRenderer.ShapeType.Line);
             shapes.setColor(1f, 0.78f, 0.35f, 1f);
             shapes.arc(centerX, centerY, 17, elapsed * 100 % 180, 120);
-            shapes.end();
         }
+        shapes.end();
     }
 
     private void drawHud(float x, float y) {
@@ -514,6 +614,8 @@ public final class GameScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
+        camera.zoom = CAMERA_ZOOM;
+        uiCamera.setToOrtho(false, width, height);
     }
 
     @Override

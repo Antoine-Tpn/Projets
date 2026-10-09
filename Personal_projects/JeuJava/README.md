@@ -38,12 +38,19 @@ Internet est necessaire la premiere fois.
 
 ## Progression et ennemis
 
-La partie comporte **20 niveaux**. Chaque niveau utilise une graine differente
-pour generer un labyrinthe de catacombes dont le chemin de la sortie reste
-accessible. Les ennemis deviennent plus nombreux au fil de la progression :
+La partie comporte **20 niveaux**. Chaque niveau genere un labyrinthe de
+catacombes de **31 x 23 cases**, avec une sortie dont le chemin reste
+accessible. La camera reste centree sur l'orc et zoome sur sa position ; les
+deplacements du heros et des ennemis sont interpoles pour un defilement fluide.
+Le rendu du jeu est synchronise avec le rafraichissement de l'ecran.
+La vision est limitee a six cases et les murs bloquent la vue.
+
+Les ennemis ne se deplacent vers l'orc et n'attaquent que lorsqu'ils le voient
+dans leur champ de vision. Un ennemi qui le perd de vue cesse de le poursuivre.
+Leur portee de vue depend du type :
 
 - **Chevalier** : combat au corps a corps.
-- **Archer** : attaque a distance avec un projectile.
+- **Archer** : attaque a distance avec un projectile et un champ de vision etendu.
 - **Mage** : tir magique plus puissant et a plus longue portee.
 - **Boss** : beaucoup de points de vie et des coups puissants. Un boss attend
   le joueur tous les cinq niveaux, y compris au dernier.

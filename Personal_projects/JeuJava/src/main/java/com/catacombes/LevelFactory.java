@@ -7,8 +7,8 @@ import java.util.Random;
 
 final class LevelFactory {
     static final int COUNT = 20;
-    private static final int WIDTH = 15;
-    private static final int HEIGHT = 11;
+    private static final int WIDTH = 31;
+    private static final int HEIGHT = 23;
 
     private LevelFactory() {
     }
@@ -37,10 +37,10 @@ final class LevelFactory {
         Collections.shuffle(openTiles, random);
 
         int cursor = 0;
-        int enemyCount = Math.min(2 + level / 3, 7);
+        int enemyCount = Math.min(5 + level / 2, 24);
         for (int i = 0; i < enemyCount; i++) {
             Enemy.Type type = chooseEnemyType(level, i);
-            int[] position = nextAvailable(openTiles, cursor++, map);
+            int[] position = nextEnemyPosition(openTiles, cursor++, map, WIDTH - 2, HEIGHT - 2);
             if (position == null) break;
             map[position[1]][position[0]] = type.mapSymbol;
         }
@@ -82,6 +82,19 @@ final class LevelFactory {
             if (map[position[1]][position[0]] == '.') return position;
         }
         return null;
+    }
+
+    private static int[] nextEnemyPosition(List<int[]> openTiles, int start, char[][] map,
+            int exitX, int exitY) {
+        for (int i = start; i < openTiles.size(); i++) {
+            int[] position = openTiles.get(i);
+            int distanceFromStart = Math.abs(position[0] - 1) + Math.abs(position[1] - 1);
+            int distanceFromExit = Math.abs(position[0] - exitX) + Math.abs(position[1] - exitY);
+            if (map[position[1]][position[0]] == '.' && distanceFromStart > 7 && distanceFromExit > 2) {
+                return position;
+            }
+        }
+        return nextAvailable(openTiles, start, map);
     }
 
     private static void carveMaze(char[][] map, int x, int y, Random random) {
